@@ -56,7 +56,7 @@ export async function listCodes(): Promise<string[]> {
         return codeCache;
     } catch (err) {
         if (err instanceof Error) {
-            console.log(err.message);
+            return [];
         }
         throw err;
     }
@@ -85,6 +85,7 @@ export async function list(): Promise<Language[]> {
         } catch (err) {
             if (err instanceof Error) {
                 console.log(err.message);
+                return;
             }
             throw err;
         }
