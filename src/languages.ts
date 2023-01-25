@@ -9,13 +9,13 @@ const languagesPath: string = path.join(__dirname, '../build/public/language');
 const files: string[] = fs.readdirSync(path.join(paths.nodeModules, '/timeago/locales'));
 const timeagoCodes: string[] = files.filter(f => f.startsWith('jquery.timeago')).map(f => f.split('.')[2]);
 
-export async function get(language: string, namespace): Promise<any> {
+export async function get(language: string, namespace: string): Promise<paths> {
     const pathToLanguageFile: string = path.join(languagesPath, language, `${namespace}.json`);
     if (!pathToLanguageFile.startsWith(languagesPath)) {
         throw new Error('[[error:invalid-path]]');
     }
     const data: string = await fs.promises.readFile(pathToLanguageFile, 'utf8');
-    const parsed = JSON.parse(data) || {};
+    const parsed: paths = JSON.parse(data) || {};
     const result = await plugins.hooks.fire('filter:languages.get', {
         language,
         namespace,
