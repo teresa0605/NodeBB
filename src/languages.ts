@@ -83,8 +83,8 @@ export async function list(): Promise<data[]> {
     return languages;
 }
 
-export async function userTimeagoCode(userLang): Promise<any> {
-    const languageCodes = await listCodes();
+export async function userTimeagoCode(userLang: string): Promise<string> {
+    const languageCodes: string[] = await listCodes();
     const timeagoCode: string = utils.userLangToTimeagoCode(userLang) as string;
     if (languageCodes.includes(userLang) && timeagoCodes.includes(timeagoCode)) {
         return timeagoCode;
