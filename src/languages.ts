@@ -1,10 +1,10 @@
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
-const utils = require('./utils');
-const { paths } = require('./constants');
-const plugins = require('./plugins');
+import fs from 'fs';
+import path from 'path';
+import utils from './utils';
+import { paths } from './constants';
+import plugins from './plugins';
 
 const Languages = module.exports;
 const languagesPath = path.join(__dirname, '../build/public/language');
