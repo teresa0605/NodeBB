@@ -4,10 +4,10 @@ import utils from './utils';
 import { paths } from './constants';
 import plugins from './plugins';
 
-type lan = {
-    code: boolean;
-    name: boolean;
-    dir: boolean;
+type Language = {
+    code: number;
+    name: string;
+    dir: number;
     languages: string[];
 }
 
@@ -48,7 +48,7 @@ export async function listCodes(): Promise<string[]> {
         const file: string = await fs.promises.readFile(path.join(languagesPath, 'metadata.json'), 'utf8');
         // The next line calls a function in a module that has not been updated to TS yet
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        const parsed: lan = JSON.parse(file) as lan;
+        const parsed: Language = JSON.parse(file) as Language;
 
         // The next line calls a function in a module that has not been updated to TS yet
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
@@ -62,8 +62,8 @@ export async function listCodes(): Promise<string[]> {
     }
 }
 
-let listCache: lan[] | null = null;
-export async function list(): Promise<lan[]> {
+let listCache: Language[] | null = null;
+export async function list(): Promise<Language[]> {
     if (listCache && listCache.length) {
         // The next line calls a function in a module that has not been updated to TS yet
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -72,13 +72,13 @@ export async function list(): Promise<lan[]> {
 
     const codes: string[] = await listCodes();
 
-    let languages: lan[] = await Promise.all(codes.map(async (folder: string) => {
+    let languages: Language[] = await Promise.all(codes.map(async (folder: string) => {
         try {
             const configPath: string = path.join(languagesPath, folder, 'language.json');
             const file: string = await fs.promises.readFile(configPath, 'utf8');
             // The next line calls a function in a module that has not been updated to TS yet
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            const lang: lan = JSON.parse(file) as lan;
+            const lang: Language = JSON.parse(file) as Language;
             // The next line calls a function in a module that has not been updated to TS yet
             // eslint-disable-next-line @typescript-eslint/no-unsafe-return
             return lang;
