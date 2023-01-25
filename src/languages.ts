@@ -9,12 +9,12 @@ const languagesPath: string = path.join(__dirname, '../build/public/language');
 const files: string[] = fs.readdirSync(path.join(paths.nodeModules, '/timeago/locales'));
 const timeagoCodes: string[] = files.filter(f => f.startsWith('jquery.timeago')).map(f => f.split('.')[2]);
 
-export async function get(language, namespace): Promise<any> {
-    const pathToLanguageFile = path.join(languagesPath, language, `${namespace}.json`);
+export async function get(language: string, namespace): Promise<any> {
+    const pathToLanguageFile: string = path.join(languagesPath, language, `${namespace}.json`);
     if (!pathToLanguageFile.startsWith(languagesPath)) {
         throw new Error('[[error:invalid-path]]');
     }
-    const data = await fs.promises.readFile(pathToLanguageFile, 'utf8');
+    const data: string = await fs.promises.readFile(pathToLanguageFile, 'utf8');
     const parsed = JSON.parse(data) || {};
     const result = await plugins.hooks.fire('filter:languages.get', {
         language,
@@ -53,8 +53,8 @@ export async function list(): Promise<any> {
 
     let languages = await Promise.all(codes.map(async (folder) => {
         try {
-            const configPath = path.join(languagesPath, folder, 'language.json');
-            const file = await fs.promises.readFile(configPath, 'utf8');
+            const configPath: string = path.join(languagesPath, folder, 'language.json');
+            const file: string = await fs.promises.readFile(configPath, 'utf8');
             const lang = JSON.parse(file);
             return lang;
         } catch (err) {
