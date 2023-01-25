@@ -40,6 +40,8 @@ export async function listCodes(): Promise<string[]> {
     }
     try {
         const file: string = await fs.promises.readFile(path.join(languagesPath, 'metadata.json'), 'utf8');
+        // The next line calls a function in a module that has not been updated to TS yet
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const parsed: data = JSON.parse(file) as data;
 
         // The next line calls a function in a module that has not been updated to TS yet
@@ -57,6 +59,8 @@ export async function listCodes(): Promise<string[]> {
 let listCache: data[] | null = null;
 export async function list(): Promise<data[]> {
     if (listCache && listCache.length) {
+        // The next line calls a function in a module that has not been updated to TS yet
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return listCache;
     }
 
