@@ -46,32 +46,40 @@ export async function listCodes(): Promise<string[]> {
     }
 }
 
-let listCache = null;
-export async function list(): Promise<any> {
+let listCache: data[] | null = null;
+export async function list(): Promise<data[]> {
     if (listCache && listCache.length) {
         return listCache;
     }
 
-    const codes = await listCodes();
+    const codes: string[] = await listCodes();
 
-    let languages = await Promise.all(codes.map(async (folder: string) => {
+    let languages: data[] = await Promise.all(codes.map(async (folder: string) => {
         try {
             const configPath: string = path.join(languagesPath, folder, 'language.json');
             const file: string = await fs.promises.readFile(configPath, 'utf8');
-            const lang = JSON.parse(file);
+            // The next line calls a function in a module that has not been updated to TS yet
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            const lang: data = JSON.parse(file) as data;
+            // The next line calls a function in a module that has not been updated to TS yet
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
             return lang;
         } catch (err) {
-            if (err.code === 'ENOENT') {
-                return;
+            if (err instanceof Error) {
+                console.log(err.message);
             }
             throw err;
         }
     }));
 
     // filter out invalid ones
+    // The next line calls a function in a module that has not been updated to TS yet
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     languages = languages.filter(lang => lang && lang.code && lang.name && lang.dir);
 
     listCache = languages;
+    // The next line calls a function in a module that has not been updated to TS yet
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return languages;
 }
 
