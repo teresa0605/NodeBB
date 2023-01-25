@@ -3,7 +3,13 @@ import path from 'path';
 import utils from './utils';
 import { paths } from './constants';
 import plugins from './plugins';
-import data from './plugins/data';
+
+type lan = {
+    code: boolean;
+    name: boolean;
+    dir: boolean;
+    languages: string[];
+}
 
 const languagesPath: string = path.join(__dirname, '../build/public/language');
 
@@ -42,11 +48,11 @@ export async function listCodes(): Promise<string[]> {
         const file: string = await fs.promises.readFile(path.join(languagesPath, 'metadata.json'), 'utf8');
         // The next line calls a function in a module that has not been updated to TS yet
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        const parsed: data = JSON.parse(file) as data;
+        const parsed: lan = JSON.parse(file) as lan;
 
         // The next line calls a function in a module that has not been updated to TS yet
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        codeCache = parsed.languages as string[];
+        codeCache = parsed.languages;
         return codeCache;
     } catch (err) {
         if (err instanceof Error) {
@@ -56,8 +62,8 @@ export async function listCodes(): Promise<string[]> {
     }
 }
 
-let listCache: data[] | null = null;
-export async function list(): Promise<data[]> {
+let listCache: lan[] | null = null;
+export async function list(): Promise<lan[]> {
     if (listCache && listCache.length) {
         // The next line calls a function in a module that has not been updated to TS yet
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -66,13 +72,13 @@ export async function list(): Promise<data[]> {
 
     const codes: string[] = await listCodes();
 
-    let languages: data[] = await Promise.all(codes.map(async (folder: string) => {
+    let languages: lan[] = await Promise.all(codes.map(async (folder: string) => {
         try {
             const configPath: string = path.join(languagesPath, folder, 'language.json');
             const file: string = await fs.promises.readFile(configPath, 'utf8');
             // The next line calls a function in a module that has not been updated to TS yet
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            const lang: data[] = JSON.parse(file) as data[];
+            const lang: lan = JSON.parse(file) as lan;
             // The next line calls a function in a module that has not been updated to TS yet
             // eslint-disable-next-line @typescript-eslint/no-unsafe-return
             return lang;
