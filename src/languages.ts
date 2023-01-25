@@ -1,5 +1,3 @@
-'use strict';
-
 import fs from 'fs';
 import path from 'path';
 import utils from './utils';
@@ -24,7 +22,7 @@ export async function get(language, namespace): Promise<any> {
         data: parsed,
     });
     return result.data;
-};
+}
 
 let codeCache = null;
 export async function listCodes(): Promise<any> {
@@ -43,7 +41,7 @@ export async function listCodes(): Promise<any> {
         }
         throw err;
     }
-};
+}
 
 let listCache = null;
 export async function list(): Promise<any> {
@@ -72,7 +70,7 @@ export async function list(): Promise<any> {
 
     listCache = languages;
     return languages;
-};
+}
 
 export async function userTimeagoCode(userLang): Promise<any> {
     const languageCodes = await listCodes();
@@ -81,4 +79,4 @@ export async function userTimeagoCode(userLang): Promise<any> {
         return timeagoCode;
     }
     return '';
-};
+}
