@@ -16,12 +16,20 @@ export async function get(language: string, namespace: string): Promise<paths> {
         throw new Error('[[error:invalid-path]]');
     }
     const data: string = await fs.promises.readFile(pathToLanguageFile, 'utf8');
+    // The next line calls a function in a module that has not been updated to TS yet
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const parsed: paths = JSON.parse(data) || {};
+    // The next line calls a function in a module that has not been updated to TS yet
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const result = await plugins.hooks.fire('filter:languages.get', {
         language,
         namespace,
+        // The next line calls a function in a module that has not been updated to TS yet
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         data: parsed,
     });
+    // The next line calls a function in a module that has not been updated to TS yet
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
     return result.data;
 }
 
