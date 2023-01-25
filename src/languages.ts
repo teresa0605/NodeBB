@@ -3,6 +3,7 @@ import path from 'path';
 import utils from './utils';
 import { paths } from './constants';
 import plugins from './plugins';
+import data from './plugins/data';
 
 const languagesPath: string = path.join(__dirname, '../build/public/language');
 
@@ -24,20 +25,22 @@ export async function get(language: string, namespace: string): Promise<paths> {
     return result.data;
 }
 
-let codeCache = null;
-export async function listCodes(): Promise<any> {
+let codeCache: string[] = null;
+export async function listCodes(): Promise<string[]> {
     if (codeCache && codeCache.length) {
         return codeCache;
     }
     try {
         const file: string = await fs.promises.readFile(path.join(languagesPath, 'metadata.json'), 'utf8');
-        const parsed = JSON.parse(file);
+        const parsed: data = JSON.parse(file) as data;
 
-        codeCache = parsed.languages;
-        return parsed.languages;
+        // The next line calls a function in a module that has not been updated to TS yet
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        codeCache = parsed.languages as string[];
+        return codeCache;
     } catch (err) {
-        if (err.code === 'ENOENT') {
-            return [];
+        if (err instanceof Error) {
+            console.log(err.message);
         }
         throw err;
     }
