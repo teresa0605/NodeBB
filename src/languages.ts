@@ -4,10 +4,10 @@ import utils from './utils';
 import { paths } from './constants';
 import plugins from './plugins';
 
-const languagesPath = path.join(__dirname, '../build/public/language');
+const languagesPath: string = path.join(__dirname, '../build/public/language');
 
-const files = fs.readdirSync(path.join(paths.nodeModules, '/timeago/locales'));
-let timeagoCodes = files.filter(f => f.startsWith('jquery.timeago')).map(f => f.split('.')[2]);
+const files: string[] = fs.readdirSync(path.join(paths.nodeModules, '/timeago/locales'));
+const timeagoCodes: string[] = files.filter(f => f.startsWith('jquery.timeago')).map(f => f.split('.')[2]);
 
 export async function get(language, namespace): Promise<any> {
     const pathToLanguageFile = path.join(languagesPath, language, `${namespace}.json`);
@@ -30,7 +30,7 @@ export async function listCodes(): Promise<any> {
         return codeCache;
     }
     try {
-        const file = await fs.promises.readFile(path.join(languagesPath, 'metadata.json'), 'utf8');
+        const file: string = await fs.promises.readFile(path.join(languagesPath, 'metadata.json'), 'utf8');
         const parsed = JSON.parse(file);
 
         codeCache = parsed.languages;
@@ -74,7 +74,7 @@ export async function list(): Promise<any> {
 
 export async function userTimeagoCode(userLang): Promise<any> {
     const languageCodes = await listCodes();
-    const timeagoCode = utils.userLangToTimeagoCode(userLang);
+    const timeagoCode: string = utils.userLangToTimeagoCode(userLang);
     if (languageCodes.includes(userLang) && timeagoCodes.includes(timeagoCode)) {
         return timeagoCode;
     }
