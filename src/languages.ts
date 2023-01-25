@@ -72,7 +72,7 @@ export async function list(): Promise<data[]> {
             const file: string = await fs.promises.readFile(configPath, 'utf8');
             // The next line calls a function in a module that has not been updated to TS yet
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            const lang: data = JSON.parse(file) as data;
+            const lang: data[] = JSON.parse(file) as data[];
             // The next line calls a function in a module that has not been updated to TS yet
             // eslint-disable-next-line @typescript-eslint/no-unsafe-return
             return lang;
