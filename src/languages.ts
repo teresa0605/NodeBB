@@ -6,13 +6,12 @@ import utils from './utils';
 import { paths } from './constants';
 import plugins from './plugins';
 
-const Languages = module.exports;
 const languagesPath = path.join(__dirname, '../build/public/language');
 
 const files = fs.readdirSync(path.join(paths.nodeModules, '/timeago/locales'));
-Languages.timeagoCodes = files.filter(f => f.startsWith('jquery.timeago')).map(f => f.split('.')[2]);
+let timeagoCodes = files.filter(f => f.startsWith('jquery.timeago')).map(f => f.split('.')[2]);
 
-Languages.get = async function (language, namespace) {
+export async function get(language, namespace): Promise<any> {
     const pathToLanguageFile = path.join(languagesPath, language, `${namespace}.json`);
     if (!pathToLanguageFile.startsWith(languagesPath)) {
         throw new Error('[[error:invalid-path]]');
@@ -28,7 +27,7 @@ Languages.get = async function (language, namespace) {
 };
 
 let codeCache = null;
-Languages.listCodes = async function () {
+export async function listCodes(): Promise<any> {
     if (codeCache && codeCache.length) {
         return codeCache;
     }
@@ -47,12 +46,12 @@ Languages.listCodes = async function () {
 };
 
 let listCache = null;
-Languages.list = async function () {
+export async function list(): Promise<any> {
     if (listCache && listCache.length) {
         return listCache;
     }
 
-    const codes = await Languages.listCodes();
+    const codes = await listCodes();
 
     let languages = await Promise.all(codes.map(async (folder) => {
         try {
@@ -75,13 +74,11 @@ Languages.list = async function () {
     return languages;
 };
 
-Languages.userTimeagoCode = async function (userLang) {
-    const languageCodes = await Languages.listCodes();
+export async function userTimeagoCode(userLang): Promise<any> {
+    const languageCodes = await listCodes();
     const timeagoCode = utils.userLangToTimeagoCode(userLang);
-    if (languageCodes.includes(userLang) && Languages.timeagoCodes.includes(timeagoCode)) {
+    if (languageCodes.includes(userLang) && timeagoCodes.includes(timeagoCode)) {
         return timeagoCode;
     }
     return '';
 };
-
-require('./promisify')(Languages);
